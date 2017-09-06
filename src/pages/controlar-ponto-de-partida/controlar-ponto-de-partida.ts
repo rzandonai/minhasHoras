@@ -17,8 +17,9 @@ export class ControlarPontoDePartidaPage {
   directionsDisplay = new google.maps.DirectionsRenderer;
 
   constructor(public navCtrl: NavController) {
-
     //google
+
+    /// buscar localização setada caso não exista usar a atual
   }
 
 
@@ -34,41 +35,23 @@ export class ControlarPontoDePartidaPage {
     var map = this.map;
 
     navigator.geolocation.getCurrentPosition(function (position) {
-
       var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: geolocate,
-        content:
-        '<h1>Location pinned from HTML5 Geolocation!</h1>' +
-        '<h2>Latitude: ' + position.coords.latitude + '</h2>' +
-        '<h2>Longitude: ' + position.coords.longitude + '</h2>'
-      });
       map.setCenter(geolocate);
-
     });
-
+    var list = []
     google.maps.event.addListener(this.map, 'click', function (e) {
+      for (var i = 0; i < list.length; i++) {
+        list[i].setMap(null);
+      }
       var marker = new google.maps.Marker({
         position: e.latLng,
         map: map
       });
+      list.push(marker);
       map.panTo(e.latLng);
     });
-
-
-
-
     this.directionsDisplay.setMap(this.map);
-  }
 
-  placeMarker(position, map) {
-    var marker = new google.maps.Marker({
-      position: position,
-      map: map
-    });
-    map.panTo(position);
   }
 
 }
